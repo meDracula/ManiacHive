@@ -1,6 +1,6 @@
 # ManiacHive
 
-This repository will contian a game called Maniac Hive and a game engine :shipit:
+This repository will contian a game called Maniac Hive and a game engine.
 
 ## Maniac Hive
 
