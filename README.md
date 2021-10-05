@@ -2,6 +2,6 @@
 
 This repository will contian a game called Maniac Hive and a game engine :shipit:
 
-##Maniac Hive
+## Maniac Hive
 
-##Game engine
+## Game engine
