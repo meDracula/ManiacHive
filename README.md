@@ -32,7 +32,7 @@ Video game: [Interloper](http://interlopergame.com/)
 Programming games: [Halite](https://halite.io/), [>_Terminal](https://terminal.c1games.com/)
 
 # Credits
-##Sprites Sheets
+## Sprites Sheets
 [Mossy Cavern](https://maaot.itch.io/mossy-cavern) by Maaot
 [Sci-fi Character Pack 12](https://penusbmic.itch.io/sci-fi-character-pack-12) by PenUsbMic
 
