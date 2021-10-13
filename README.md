@@ -1,5 +1,4 @@
 # ManiacHive
----
 This repository will soon... or never.
 Contian a game called Maniac Hive.
 This game will be a bot programming game. Meaning that you don't play
@@ -7,7 +6,6 @@ the game your bot code does.
 Simply **Code your bot, upload it, run it, then destory them all!** 
 
 ## Maniac Hive
----
 Maniac Hive is a Turned based programming bot game. 
 Where the two player write their own bots in the programming language pythons.
 The bots then compete against one another by captuering the overmajority domain 
