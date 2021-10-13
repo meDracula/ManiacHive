@@ -1,11 +1,14 @@
 # ManiacHive
-
-This repository will contian a game called Maniac Hive.
-
-Code it, upload it, run it. 
+---
+This repository will soon... or never.
+Contian a game called Maniac Hive.
+This game will be a bot programming game. Meaning that you don't play
+the game your bot code does. 
+Simply **Code your bot, upload it, run it, then destory them all!** 
 
 ## Maniac Hive
-Maniac Hive is a RTS( Real-Time strategy ) programming bot game. 
+---
+Maniac Hive is a Turned based programming bot game. 
 Where the two player write their own bots in the programming language pythons.
 The bots then compete against one another by captuering the overmajority domain 
 of the playing field.
@@ -27,12 +30,13 @@ and these workers can be captuered by the queen and become apart of her hive.
 
 * The game is won when 80% of the map is captuered by a queen. 
 
-## Inspiration
-Video game: [Interloper](http://interlopergame.com/)
-Programming games: [Halite](https://halite.io/), [>_Terminal](https://terminal.c1games.com/)
+# Inspiration
+* Video game: [Interloper](http://interlopergame.com/) 
+* Programming games: [Halite](https://halite.io/), [>_Terminal](https://terminal.c1games.com/)
 
 # Credits
+Thank you Maaot for making these awesome sprites and sharing them with the world.
+
 ## Sprites Sheets
-[Mossy Cavern](https://maaot.itch.io/mossy-cavern) by Maaot
-[Sci-fi Character Pack 12](https://penusbmic.itch.io/sci-fi-character-pack-12) by PenUsbMic
+* [Mossy Cavern](https://maaot.itch.io/mossy-cavern) by Maaot
 
