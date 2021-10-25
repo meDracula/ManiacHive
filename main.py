@@ -2,6 +2,7 @@ import pygame, sys
 from os import path
 from settings import *
 from sprites import *
+from tilemap import Map
 
 class Game:
     def __init__(self):
@@ -12,11 +13,9 @@ class Game:
         self.load_data()
 
     def load_data(self):
-        game_directory = path.dirname(__file__)
-        with open(path.join(game_directory, 'map.txt'), 'rt') as rf:
-            map_lenght_row = HEIGHT // TILESIZE
-            map_lenght_column = (WIDTH // TILESIZE) + 1 # +1 is for \n
-            self.map_data = [rf.read(map_lenght_column) for _ in range(0, map_lenght_row)]
+        assets_dir = path.join(path.dirname(__file__), 'assets')
+        map_file = path.join(assets_dir, 'map.txt')
+        self.map = Map(map_file)
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -28,16 +27,8 @@ class Game:
         self.team_blue = pygame.sprite.Group()
         self.unknowns = pygame.sprite.Group()
 
-        for row, tiles in enumerate(self.map_data):
-            for col, tile in enumerate(tiles):
-                if tile == '1':
-                    Wall(self, col, row)
-                elif tile == 'O':
-                    self.queen = Queen(self, col, row, self.team_orange)
-                elif tile == 'B':
-                    self.queen = Queen(self, col, row, self.team_blue)
-                elif tile == 'X':
-                    self.blob = Blobs(self, col, row)
+        #Generate map
+        self.map.new(self)
 
     def run(self):
         # Game loop - set self.playing = False to end the game
