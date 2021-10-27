@@ -15,13 +15,20 @@ class Map:
         """
             Converts map data to objects
         """
+        game.max_tiles = 0
         for row, tiles in enumerate(self.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(game, col, row)
                 elif tile == 'O':
-                    game.queen = Queen(game, col, row, game.team_orange)
+                    #Wall(game, col-1, row)
+                    Plane(game, col, row, game.team_orange)
+                    game.queen_orange = Queen(game, col, row, game.team_orange)
                 elif tile == 'B':
-                    game.queen = Queen(game, col, row, game.team_blue)
+                    #Wall(game, col+1, row)
+                    Plane(game, col, row, game.team_blue)
+                    game.queen_blue = Queen(game, col, row, game.team_blue)
                 elif tile == 'X':
                     game.blob = Blobs(game, col, row)
+                elif tile == '.':
+                    game.max_tiles += 1

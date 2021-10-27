@@ -3,6 +3,7 @@ from os import path
 from settings import *
 from sprites import *
 from tilemap import Map
+from interact import PlayerHandler
 
 class Game:
     def __init__(self):
@@ -29,6 +30,9 @@ class Game:
 
         #Generate map
         self.map.new(self)
+
+        #Time event
+        self.handler = PlayerHandler()
 
     def run(self):
         # Game loop - set self.playing = False to end the game
@@ -65,8 +69,10 @@ class Game:
                 self.quit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.quit()
-            
-            #to move Queen self.queen.move(dx=1) 
+
+            if event.type == self.handler.action_timer:
+                #self.handler.move(self)
+                print("action")
 
     def show_start_screen(self):
         pass
