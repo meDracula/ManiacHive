@@ -32,3 +32,4 @@ class Map:
                     game.blob = Blobs(game, col, row)
                 elif tile == '.':
                     game.max_tiles += 1
+

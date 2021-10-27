@@ -19,10 +19,13 @@ class Plane(pygame.sprite.Sprite):
         self.groups = game.all_sprites, team
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+
         self.image = pygame.Surface((TILESIZE, TILESIZE))
-        color = PLANE_ORANGE if self.game.team_orange == team else PLANE_BLUE
-        self.image.fill(color)
         self.rect = self.image.get_rect()
+        color = PLANE_ORANGE if self.game.team_orange == team else PLANE_BLUE
+        self.image.set_alpha(50)
+        pygame.draw.rect(self.image, color, self.rect, 10)
+
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
@@ -35,13 +38,19 @@ class Queen(pygame.sprite.Sprite):
         self.game = game
         self.team = team
         self.image = pygame.Surface((TILESIZE, TILESIZE))
-        color = BLUE if team == game.team_blue else ORANGE
+        if team == game.team_blue:
+            self.enemy_team, color = game.team_blue, BLUE
+        else:
+            self.enemy_team, color = game.team_orange, ORANGE
+        #color = BLUE if team == game.team_blue else ORANGE
+        self.image = pygame.Surface((TILESIZE, TILESIZE))
         self.image.fill(color)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
 
         self.compas = {'East':(-1,0), 'West':(1,0),'North':(0,-1), 'South': (0,1)}
+        #self.possible_dir = ['West']
         self.possible_dir = self.possible_moves()
     
     def move(self, cardinal_dir):
@@ -57,12 +66,16 @@ class Queen(pygame.sprite.Sprite):
 
     def possible_moves(self) -> list:
         moves = []
+        def close_wall(walls):
+            for wall in self.game.walls:
+                if (-2 < (wall.x - self.x) < 2) and (-2 < (wall.y - self.y) < 2):
+                    yield ((wall.x - self.x), (wall.y - self.y))
+
+        walls_list = [wall for wall in close_wall(self.game.walls)]
         for item in self.compas:
             dx, dy = self.compas[item]
-            ax, ay = dx + self.x, dy + self.y
-            #print(dx, dy ,item, ax, ay)
-            if not self.rect.collidepoint(ax, ay):
-                moves.append(item)
+            if not ((dx,dy) in walls_list):
+                moves.append(item) 
         return moves
 
     def update(self):

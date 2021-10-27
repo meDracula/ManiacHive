@@ -58,6 +58,9 @@ class Game:
             pygame.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     def draw(self):
+        #TODO Remove later to see fps
+        #pygame.display.set_caption("{:.2f}".format(self.clock.get_fps()))
+
         self.screen.fill(BGCOLOR)
         self.draw_grid()
         self.all_sprites.draw(self.screen)
@@ -71,8 +74,7 @@ class Game:
                 self.quit()
 
             if event.type == self.handler.action_timer:
-                #self.handler.move(self)
-                print("action")
+                self.handler.move(self)
 
     def show_start_screen(self):
         pass
