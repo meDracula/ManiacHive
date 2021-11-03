@@ -50,7 +50,7 @@ class Game:
             self.draw()
 
     def quit(self):
-        self.handler.quit()
+        self.handler.quit(self)
         pygame.quit()
         sys.exit()
     
