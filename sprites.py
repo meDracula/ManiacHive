@@ -68,15 +68,16 @@ class Queen(pygame.sprite.Sprite):
 
     def possible_moves(self) -> list:
         moves = []
-        def close_wall(walls):
-            for wall in self.game.walls:
-                if (-2 < (wall.x - self.x) < 2) and (-2 < (wall.y - self.y) < 2):
-                    yield ((wall.x - self.x), (wall.y - self.y))
+        def close_obstructions(obstructions):
+            for obs in obstructions:
+                if (-2 < (obs.x - self.x) < 2) and (-2 < (obs.y - self.y) < 2):
+                    yield ((obs.x - self.x), (obs.y - self.y))
 
-        walls_list = [wall for wall in close_wall(self.game.walls)]
+        objects_list = self.game.walls.sprites() + self.opponent_team.objects.sprites()
+        obstruction_list = [obstruction for obstruction in close_obstructions(objects_list)]
         for item in self.compas:
             dx, dy = self.compas[item]
-            if not ((dx,dy) in walls_list):
+            if not ((dx,dy) in obstruction_list):
                 moves.append(item) 
         return moves
 

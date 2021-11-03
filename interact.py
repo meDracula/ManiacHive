@@ -15,7 +15,6 @@ class PlayerHandler:
         team.script = file
         team.spawn(team.script)
         stdin_queen = "{} {}".format(int(queen.x), int(queen.y))
-        print(stdin_queen)
         team.run_init(stdin_queen)
 
     def player_turn(self, game):
@@ -32,7 +31,6 @@ class PlayerHandler:
 
     def handler_dump(self, game, queen):
         stdin_queen = " ".join(queen.possible_dir)
-        print(stdin_queen)
         return queen.team.run(stdin_queen)
 
     def move(self, max_tiles, queen, direction):
