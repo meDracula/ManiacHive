@@ -33,7 +33,7 @@ class PlayerHandler:
     def handler_dump(self, game, queen):
         stdin_queen = " ".join(queen.possible_dir)
         print(stdin_queen)
-        return queen.team.run(stdin_queen, 30)
+        return queen.team.run(stdin_queen)
 
     def move(self, max_tiles, queen, direction):
         print("Move:", direction)

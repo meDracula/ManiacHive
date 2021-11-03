@@ -33,12 +33,11 @@ class TeamHandler:
         self.child.sendline(command)
         self.child.readline()
 
-    def run(self, command, timeout=1):
+    def run(self, command):
         self.child.expect('')
         self.child.sendline(command)
 
         self.child.expect('stdout:')
-        #player_out = self.child.read_nonblocking(size=10, timeout=timeout).decode('utf-8')
         player_out = self.child.readline().decode('utf-8')
         return player_out.strip() 
 
