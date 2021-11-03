@@ -21,14 +21,15 @@ class Map:
                 if tile == '1':
                     Wall(game, col, row)
                 elif tile == 'O':
-                    #Wall(game, col-1, row)
                     Plane(game, col, row, game.team_orange)
                     game.queen_orange = Queen(game, col, row, game.team_orange)
+                    game.max_tiles += 1
                 elif tile == 'B':
-                    #Wall(game, col+1, row)
                     Plane(game, col, row, game.team_blue)
                     game.queen_blue = Queen(game, col, row, game.team_blue)
+                    game.max_tiles += 1
                 elif tile == 'X':
+                    game.max_tiles += 1
                     game.blob = Blobs(game, col, row)
                 elif tile == '.':
                     game.max_tiles += 1

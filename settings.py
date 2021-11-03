@@ -22,8 +22,15 @@ HEIGHT = 768 # 16 * 48 or 32 * 24 or 64 * 12 -> Tile size * map Tiles
 FPS = 60
 TITLE = "Maniac Hive"
 BGCOLOR = DARKGREY
+STARTING_TEAM = 'orange' #orange or blue
 
 SPRITESHEET = 'assets/TileSet.png'
 TILESIZE = 64 #64, 32, 16
 GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
+TILESIZE_OFFSET = 10
+
+WIN_PERCENTAGE = 0.65
+
+#Directory for player scripts
+DIRECTORY = 'scripts'

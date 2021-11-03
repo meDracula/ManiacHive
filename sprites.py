@@ -5,7 +5,6 @@ class Wall(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
         self.image = pygame.Surface((TILESIZE, TILESIZE))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
@@ -15,16 +14,13 @@ class Wall(pygame.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 class Plane(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, team):
-        self.groups = game.all_sprites, team
+    def __init__(self, game, x, y, Team):
+        self.groups = game.all_sprites, Team.tiles
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
-
         self.image = pygame.Surface((TILESIZE, TILESIZE))
         self.rect = self.image.get_rect()
-        color = PLANE_ORANGE if self.game.team_orange == team else PLANE_BLUE
-        self.image.set_alpha(50)
-        pygame.draw.rect(self.image, color, self.rect, 10)
+        self.image.set_alpha(60)
+        pygame.draw.rect(self.image, Team.plane_color, self.rect, TILESIZE_OFFSET)
 
         self.x = x
         self.y = y
@@ -32,25 +28,19 @@ class Plane(pygame.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 class Queen(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, team):
-        self.groups = game.all_sprites, team
+    def __init__(self, game, x, y, Team):
+        self.groups = game.all_sprites, Team.objects
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.team = team
+        self.team = Team
         self.image = pygame.Surface((TILESIZE, TILESIZE))
-        if team == game.team_blue:
-            self.enemy_team, color = game.team_blue, BLUE
-        else:
-            self.enemy_team, color = game.team_orange, ORANGE
-        #color = BLUE if team == game.team_blue else ORANGE
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
-        self.image.fill(color)
-        self.rect = self.image.get_rect()
-        self.x = x
+        self.image.fill(Team.color)
+        self.rect = pygame.rect.Rect((x + TILESIZE_OFFSET, y + TILESIZE_OFFSET), (TILESIZE - TILESIZE_OFFSET, TILESIZE - TILESIZE_OFFSET))
+        #self.rect = self.image.get_rect()
+        self.x = x 
         self.y = y
 
         self.compas = {'East':(-1,0), 'West':(1,0),'North':(0,-1), 'South': (0,1)}
-        #self.possible_dir = ['West']
         self.possible_dir = self.possible_moves()
     
     def move(self, cardinal_dir):
@@ -59,7 +49,14 @@ class Queen(pygame.sprite.Sprite):
             dx, dy = self.compas[cardinal_dir]
             self.x += dx
             self.y += dy
-            Plane(self.game, self.x, self.y, self.team)
+
+            collision_team =  pygame.sprite.spritecollide(self, self.team.tiles, False)
+            print("collision team: ", collision_team)
+            if pygame.sprite.spritecollide(self, self.team.tiles, False):
+                pass
+            else:
+                print("Creating Plane...")
+                Plane(self.game, self.x, self.y, self.team)
             self.possible_dir = self.possible_moves()
         else:
             raise NameError('Invalid move in cardinal direction')

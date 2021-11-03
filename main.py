@@ -1,12 +1,18 @@
-import pygame, sys
-from os import path
+import pygame
+import sys
+from os import path, listdir
+
 from settings import *
 from sprites import *
 from tilemap import Map
+from teams import *
 from interact import PlayerHandler
 
 class Game:
     def __init__(self):
+        self.start_setup()
+        print("Starting...")
+
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption(TITLE)
@@ -23,16 +29,16 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
 
-        #Team Groups
-        self.team_orange = pygame.sprite.Group()
-        self.team_blue = pygame.sprite.Group()
+        #Teams
+        self.team_orange = Orange()
+        self.team_blue = Blue()
         self.unknowns = pygame.sprite.Group()
 
         #Generate map
         self.map.new(self)
 
-        #Time event
-        self.handler = PlayerHandler()
+        #Time event & SETUP: player file
+        self.handler = PlayerHandler(self)
 
     def run(self):
         # Game loop - set self.playing = False to end the game
@@ -44,6 +50,7 @@ class Game:
             self.draw()
 
     def quit(self):
+        self.handler.quit()
         pygame.quit()
         sys.exit()
     
@@ -58,13 +65,16 @@ class Game:
             pygame.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     def draw(self):
-        #TODO Remove later to see fps
-        #pygame.display.set_caption("{:.2f}".format(self.clock.get_fps()))
-
         self.screen.fill(BGCOLOR)
         self.draw_grid()
         self.all_sprites.draw(self.screen)
         pygame.display.flip()
+
+    def win(self, score):
+        percentage = round(score / self.max_tiles, 2)
+        if percentage > WIN_PERCENTAGE:
+            return True
+        return False
 
     def events(self):
         for event in pygame.event.get():
@@ -74,10 +84,44 @@ class Game:
                 self.quit()
 
             if event.type == self.handler.action_timer:
-                self.handler.move(self)
+                self.handler.player_turn(self)
+
+        if self.win(self.team_orange.score) or self.win(self.team_blue.score):
+            self.quit()
+
+    def start_setup(self):
+        print("<" + "="*5 + f"SETUP" + "="*5 + ">")
+        script_dir = path.join(path.dirname(__file__), DIRECTORY)
+        while True:
+            print("ID: File")
+            listfile = listdir(script_dir)
+            for file_id, file in enumerate(listfile):
+                print(f"{file_id+1}: {file}")
+
+            player1 = input("Enter Player 1 id file: ")
+
+            condition = lambda cond: all([cond.isdigit(), 
+                                        0 < int(cond) <= len(listfile), 
+                                        path.exists(script_dir + "/" + listfile[int(cond)-1]), 
+                                        listfile[int(cond)-1].endswith(".py")])
+
+            if condition(player1):
+                self.player1 = script_dir + "/" + listfile[int(player1)-1]
+            else:
+                continue 
+
+            player2 = input("Enter Player 2 id file: ")
+
+            if condition(player2):
+                self.player2 = script_dir + "/" + listfile[int(player2)-1]
+            else:
+                continue 
+
+            print("<" + "="*5 + f"{TITLE}" + "="*5 + ">")
+            break
 
     def show_start_screen(self):
-        pass
+            pass
 
     def show_go_screen(self):
         pass
