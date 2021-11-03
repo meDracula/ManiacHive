@@ -1,11 +1,10 @@
 import pygame
 import sys
 from os import path, listdir
-
 from settings import *
 from sprites import *
 from tilemap import Map
-from teams import *
+from teams import Blue, Orange
 from interact import PlayerHandler
 
 class Game:

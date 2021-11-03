@@ -22,11 +22,11 @@ class Map:
                     Wall(game, col, row)
                 elif tile == 'O':
                     Plane(game, col, row, game.team_orange)
-                    game.queen_orange = Queen(game, col, row, game.team_orange)
+                    game.queen_orange = Queen(game, col, row, game.team_orange, game.team_blue)
                     game.max_tiles += 1
                 elif tile == 'B':
                     Plane(game, col, row, game.team_blue)
-                    game.queen_blue = Queen(game, col, row, game.team_blue)
+                    game.queen_blue = Queen(game, col, row, game.team_blue, game.team_orange)
                     game.max_tiles += 1
                 elif tile == 'X':
                     game.max_tiles += 1

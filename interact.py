@@ -14,7 +14,7 @@ class PlayerHandler:
         print(file)
         team.script = file
         team.spawn(team.script)
-        stdin_queen = "{} {}".format(queen.x, queen.y)
+        stdin_queen = "{} {}".format(int(queen.x), int(queen.y))
         print(stdin_queen)
         team.run_init(stdin_queen)
 

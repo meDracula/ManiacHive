@@ -28,18 +28,17 @@ class Plane(pygame.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 class Queen(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, Team):
+    def __init__(self, game, x, y, Team, opponent):
         self.groups = game.all_sprites, Team.objects
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.team = Team
+        self.opponent_team = opponent
         self.image = pygame.Surface((TILESIZE, TILESIZE))
         self.image.fill(Team.color)
-        self.rect = pygame.rect.Rect((x + TILESIZE_OFFSET, y + TILESIZE_OFFSET), (TILESIZE - TILESIZE_OFFSET, TILESIZE - TILESIZE_OFFSET))
-        #self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect()
         self.x = x 
         self.y = y
-
         self.compas = {'East':(-1,0), 'West':(1,0),'North':(0,-1), 'South': (0,1)}
         self.possible_dir = self.possible_moves()
     
@@ -50,13 +49,19 @@ class Queen(pygame.sprite.Sprite):
             self.x += dx
             self.y += dy
 
-            collision_team =  pygame.sprite.spritecollide(self, self.team.tiles, False)
-            print("collision team: ", collision_team)
-            if pygame.sprite.spritecollide(self, self.team.tiles, False):
-                pass
-            else:
-                print("Creating Plane...")
+            #No collision
+            if not self.sprite_collision(self.team.tiles):
+                print("Creating plane...")
                 Plane(self.game, self.x, self.y, self.team)
+
+            #Opponent tile collision
+            if self.sprite_collision(self.opponent_team.tiles, True):
+                Plane(self.game, self.x, self.y, self.team)
+
+            #Capture blob
+            if self.sprite_collision(self.game.unknowns, capture=True):
+                print("Blob")
+
             self.possible_dir = self.possible_moves()
         else:
             raise NameError('Invalid move in cardinal direction')
@@ -75,6 +80,17 @@ class Queen(pygame.sprite.Sprite):
                 moves.append(item) 
         return moves
 
+    def sprite_collision(self, sprites: list, destroy=False, capture=False):
+        for sprite in sprites:
+            if self.x == sprite.x and self.y == sprite.y:
+                if destroy:
+                    sprite.kill()
+                elif capture:
+                    self.team.objects.add(sprite)
+                    self.game.unknowns.remove(sprite)
+                return True
+        return False
+
     def update(self):
         self.rect.x = self.x * TILESIZE
         self.rect.y = self.y * TILESIZE
@@ -89,9 +105,6 @@ class Blobs(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-
-    def captured(self):
-        pass
 
     def move(self, dx=0, dy=0):
         self.x += dx
