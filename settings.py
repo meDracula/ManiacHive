@@ -19,7 +19,7 @@ PLANE_ORANGE = (255, 153, 51)
 # game settings
 WIDTH = 1024 # 16 * 64 or 32 * 32 or 64 * 16 -> Tile size * map Tiles
 HEIGHT = 768 # 16 * 48 or 32 * 24 or 64 * 12 -> Tile size * map Tiles
-FPS = 60
+FPS = 30
 TITLE = "Maniac Hive"
 BGCOLOR = DARKGREY
 STARTING_TEAM = 'orange' #orange or blue

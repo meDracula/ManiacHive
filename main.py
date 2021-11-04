@@ -56,6 +56,8 @@ class Game:
     def update(self):
         # Update portion of the game loop
         self.all_sprites.update()
+        self.team_orange.update()
+        self.team_blue.update()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -83,6 +85,8 @@ class Game:
                 self.quit()
 
             if event.type == self.handler.action_timer:
+                self.team_orange.update_direction()
+                self.team_blue.update_direction()
                 self.handler.player_turn(self)
 
         if self.win(self.team_orange.score) or self.win(self.team_blue.score):

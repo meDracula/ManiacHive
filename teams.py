@@ -26,18 +26,21 @@ class TeamHandler:
             raise FileNotFoundError("File apperas to no longer exists")
 
     def spawn(self, file):
-        self.child = pexpect.spawn(f"{sys.executable} {file}")
+        try:
+            self.child = pexpect.spawn(f"{sys.executable} {file}")
+        except:
+            raise ChildProcessError(f"{file}.py could not spawn")
 
     def run_init(self, command):
         self.child.expect('')
         self.child.sendline(command)
         self.child.readline()
 
-    def run(self, command):
+    def run(self, command, timeout=-1):
         self.child.expect('')
         self.child.sendline(command)
 
-        self.child.expect('stdout:')
+        self.child.expect('stdout:', timeout=timeout)
         player_out = self.child.readline().decode('utf-8')
         return player_out.strip() 
 
@@ -50,6 +53,22 @@ class Orange(TeamHandler):
         self.objects = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
 
+        self.old_sprites = self.objects.sprites()
+        self.sprites_info = {}
+        for sprite in self.old_sprites:
+            self.sprites_info[sprite.unit] = [sprite, sprite.possible_dir]
+
+    def update(self):
+        if self.old_sprites != self.objects.sprites():
+            self.old_sprites = self.objects.sprites()
+            self.sprites_info.clear() 
+            for sprite in self.old_sprites:
+                self.sprites_info[sprite.unit] = [sprite, sprite.possible_dir]
+
+    def update_direction(self):
+        for sprite in self.old_sprites:
+            self.sprites_info[sprite.unit][1] = sprite.possible_dir
+
     @property
     def score(self):
         return len(self.tiles.sprites()) 
@@ -59,6 +78,22 @@ class Blue(TeamHandler):
         super().__init__(BLUE, PLANE_BLUE)
         self.objects = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
+
+        self.old_sprites = self.objects.sprites()
+        self.sprites_info = {}
+        for sprite in self.old_sprites:
+            self.sprites_info[sprite.unit] = [sprite, sprite.possible_dir]
+
+    def update(self):
+        if self.old_sprites != self.objects.sprites():
+            self.old_sprites = self.objects.sprites()
+            self.sprites_info.clear() 
+            for sprite in self.old_sprites:
+                self.sprites_info[sprite.unit] = [sprite, sprite.possible_dir]
+
+    def update_direction(self):
+        for sprite in self.old_sprites:
+            self.sprites_info[sprite.unit][1] = sprite.possible_dir
 
     @property
     def score(self):

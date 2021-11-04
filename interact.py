@@ -1,5 +1,6 @@
 import pygame
 from settings import STARTING_TEAM, DIRECTORY
+from semantic import SemanticHandler
 
 class PlayerHandler:
     def __init__(self, game):
@@ -14,29 +15,35 @@ class PlayerHandler:
         print(file)
         team.script = file
         team.spawn(team.script)
-        stdin_queen = "{} {}".format(int(queen.x), int(queen.y))
+        stdin_queen = "{} {} {}".format(queen.unit, int(queen.x), int(queen.y))
         team.run_init(stdin_queen)
 
     def player_turn(self, game):
         if self.team_turn == self.teams[0]:
             print("<===Orange===>")
-            direction = self.handler_dump(game, game.queen_orange)
-            self.move(game.max_tiles, game.queen_orange, direction)
+            self.action(game.team_orange, game.max_tiles)
             self.team_turn = self.teams[1]
         else:
             print("<===Blue===>")
-            direction = self.handler_dump(game, game.queen_blue)
-            self.move(game.max_tiles, game.queen_blue, direction)
+            self.action(game.team_blue, game.max_tiles)
             self.team_turn = self.teams[0]
 
-    def handler_dump(self, game, queen):
-        stdin_queen = " ".join(queen.possible_dir)
-        return queen.team.run(stdin_queen)
+    def stdin_sample(self, sprites_info):
+        possible_dir = [" ".join(value[1]) for value in sprites_info.values()]
+        sample = " ".join([f"{key} {value}" for key, value in zip(sprites_info.keys(), possible_dir)])
+        print(sample)
+        return sample
 
-    def move(self, max_tiles, queen, direction):
+    def action(self, team, max_tiles):
+        command = team.run(self.stdin_sample(team.sprites_info), 10)
+        commands = SemanticHandler.syntax(command, team.sprites_info) #return {id: dir}
+        for key in commands:
+            self.move(team.sprites_info[key][0], commands[key]) 
+        print(f"Score: {round(team.score/max_tiles, 2)*100}% : {team.score}/{max_tiles}")
+
+    def move(self, sprite, direction):
+        sprite.move(direction)
         print("Move:", direction)
-        queen.move(direction)
-        print(f"Score: {round(queen.team.score/max_tiles, 2)*100}% : {queen.team.score}/{max_tiles}")
 
     def quit(self, game):
         game.team_orange.kill_child()

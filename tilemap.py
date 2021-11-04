@@ -30,7 +30,7 @@ class Map:
                     game.max_tiles += 1
                 elif tile == 'X':
                     game.max_tiles += 1
-                    game.blob = Blobs(game, col, row)
+                    Blobs(game, col, row)
                 elif tile == '.':
                     game.max_tiles += 1
 
