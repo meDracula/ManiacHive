@@ -36,9 +36,12 @@ class TeamHandler:
         self.child.sendline(command)
         self.child.readline()
 
-    def run(self, command, timeout=-1):
+    def run(self, team_command, enemy_command, timeout=-1):
         self.child.expect('')
-        self.child.sendline(command)
+        self.child.sendline(team_command)
+
+        self.child.expect('')
+        self.child.sendline(enemy_command)
 
         self.child.expect('stdout:', timeout=timeout)
         player_out = self.child.readline().decode('utf-8')
@@ -52,6 +55,7 @@ class Orange(TeamHandler):
         super().__init__(ORANGE, PLANE_ORANGE)
         self.objects = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
+        self.flag = 'orange'
 
         self.old_sprites = self.objects.sprites()
         self.sprites_info = {}
@@ -78,6 +82,7 @@ class Blue(TeamHandler):
         super().__init__(BLUE, PLANE_BLUE)
         self.objects = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
+        self.flag = 'blue'
 
         self.old_sprites = self.objects.sprites()
         self.sprites_info = {}

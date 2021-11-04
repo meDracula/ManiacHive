@@ -17,6 +17,7 @@ def blob(possible_moves):
 while True:
     ###DO NOT CHANGE###
     id_possible_dir = input() 
+    enemy_queen = input() #id x y where x and y is int, ex: 1 3 2
     
     arr = {}
     for r in id_possible_dir.split():

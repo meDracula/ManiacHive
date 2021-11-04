@@ -4,6 +4,7 @@ queen_id, queen_x, queen_y = [int(s) for s in input().split()] ###DO NOT CHANGE 
 while True:
     ###DO NOT CHANGE Input###
     id_possible_dir = input() 
+    enemy_queen = input() #id x y where x and y is int, ex: 1 3 2
 
     arr = {}
     for r in id_possible_dir.split():

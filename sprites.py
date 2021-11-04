@@ -115,6 +115,7 @@ class Blobs(pygame.sprite.Sprite):
         self.opponent_team = None
         self.compas = {'East':(-1,0), 'West':(1,0),'North':(0,-1), 'South': (0,1)}
         self.possible_dir = self.possible_moves()
+        print(self.possible_dir)
 
     @classmethod
     def assign_unit(cls):

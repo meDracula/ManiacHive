@@ -1,5 +1,5 @@
 import pygame
-from settings import STARTING_TEAM, DIRECTORY
+from settings import STARTING_TEAM, DIRECTORY, ORANGE, BLUE
 from semantic import SemanticHandler
 
 class PlayerHandler:
@@ -21,11 +21,11 @@ class PlayerHandler:
     def player_turn(self, game):
         if self.team_turn == self.teams[0]:
             print("<===Orange===>")
-            self.action(game.team_orange, game.max_tiles)
+            self.action(game.team_orange, game.queen_blue, game.max_tiles)
             self.team_turn = self.teams[1]
         else:
             print("<===Blue===>")
-            self.action(game.team_blue, game.max_tiles)
+            self.action(game.team_blue, game.queen_orange, game.max_tiles)
             self.team_turn = self.teams[0]
 
     def stdin_sample(self, sprites_info):
@@ -34,9 +34,13 @@ class PlayerHandler:
         print(sample)
         return sample
 
-    def action(self, team, max_tiles):
-        command = team.run(self.stdin_sample(team.sprites_info), 10)
-        commands = SemanticHandler.syntax(command, team.sprites_info) #return {id: dir}
+    def opponent_queen(self, queen):
+        return f"{1} {queen.x} {queen.y}"
+
+    def action(self, team, enemy_queen, max_tiles):
+        command = self.stdin_sample(team.sprites_info)
+        stdout = team.run(command, self.opponent_queen(enemy_queen), 10)
+        commands = SemanticHandler.syntax(stdout, team.sprites_info) #return {id: dir}
         for key in commands:
             self.move(team.sprites_info[key][0], commands[key]) 
         print(f"Score: {round(team.score/max_tiles, 2)*100}% : {team.score}/{max_tiles}")
