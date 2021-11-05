@@ -30,6 +30,18 @@ and these workers can be captuered by the queen and become apart of her hive.
 
 * The game is won when 65% of the map is captuered by a queen. 
 
+###Lets play
+In order to play there is a directory/folder called script there is a file called:
+- _playerTemplelet.py_
+This file contains a structure of *inputs* and *print* which much be followed inorder
+to play. It is recommended to copy this file and make your own **!**
+You launches the game by the python inpreter through command: 
+`$: python main.py`
+Once runnig you can select any file from the _script/_ directory but note that the game 
+will only run files with .py extensions.
+Then select a file with .py for your opponent. Now watch your incredible work come to
+life. Then win or improve it. And recursion through these steps.
+
 # Inspiration
 * Video game: [Interloper](http://interlopergame.com/) 
 * Programming games: [Halite](https://halite.io/), [>_Terminal](https://terminal.c1games.com/)
