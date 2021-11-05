@@ -73,7 +73,7 @@ class Game:
 
     def win(self, score):
         percentage = round(score / self.max_tiles, 2)
-        if percentage > WIN_PERCENTAGE:
+        if percentage >= WIN_PERCENTAGE:
             return True
         return False
 
@@ -124,16 +124,21 @@ class Game:
             break
 
     def show_start_screen(self):
-            pass
-
-    def show_go_screen(self):
+        #For the future development
         pass
 
-#Create the game Instance
-g = Game()
-g.show_start_screen()
-while True:
-    g.new()
-    g.run()
-    g.show_go_screen()
+    def show_go_screen(self):
+        #For the future development
+        pass
 
+def main():
+    #Create the game Instance
+    g = Game()
+    g.show_start_screen()
+    while True:
+        g.new()
+        g.run()
+        g.show_go_screen()
+
+if __name__ == '__main__':
+    main()

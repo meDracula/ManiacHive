@@ -2,13 +2,13 @@ class SemanticHandler:
     @classmethod
     def syntax(cls, stdin, sprites_info):
         if len(stdin.split()) % 2 == 0:
-            stdout_dict = cls.stdout_grammer(stdin, sprites_info)
+            stdout_dict = cls.grammer(stdin, sprites_info)
         else:
             raise SyntaxError("In stdout: conform to 'id Direction' ex: 1 East")
 
         return stdout_dict
 
-    def stdout_grammer(stdin, sprites_info):
+    def grammer(stdin, sprites_info):
         commands = stdin.split()
         compas = ['East', 'West','North', 'South']
         stdout_dict = {}
