@@ -30,7 +30,7 @@ and these workers can be captuered by the queen and become apart of her hive.
 
 * The game is won when 65% of the map is captuered by a queen. 
 
-###Lets play
+### Lets play
 In order to play there is a directory/folder called script there is a file called:
 - _playerTemplelet.py_
 This file contains a structure of *inputs* and *print* which much be followed inorder
