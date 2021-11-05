@@ -35,8 +35,11 @@ In order to play there is a directory/folder called script there is a file calle
 - _playerTemplelet.py_
 This file contains a structure of *inputs* and *print* which much be followed inorder
 to play. It is recommended to copy this file and make your own **!**
-You launches the game by the python inpreter through command: 
+
+You launches the game by the python inpreter through command:
+
 `$: python main.py`
+
 Once runnig you can select any file from the _script/_ directory but note that the game 
 will only run files with .py extensions.
 Then select a file with .py for your opponent. Now watch your incredible work come to
