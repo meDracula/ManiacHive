@@ -1,31 +1,34 @@
 import pygame
-from settings import *
+import settings
+
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
+        self.image = pygame.Surface((settings.TILESIZE, settings.TILESIZE))
+        self.image.fill(settings.GREEN)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+        self.rect.x = x * settings.TILESIZE
+        self.rect.y = y * settings.TILESIZE
+
 
 class Plane(pygame.sprite.Sprite):
     def __init__(self, game, x, y, Team):
         self.groups = game.all_sprites, Team.tiles
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
+        self.image = pygame.Surface((settings.TILESIZE, settings.TILESIZE))
         self.rect = self.image.get_rect()
         self.image.set_alpha(60)
-        pygame.draw.rect(self.image, Team.plane_color, self.rect, TILESIZE_OFFSET)
+        pygame.draw.rect(self.image, Team.plane_color, self.rect, settings.TILESIZE_OFFSET)
 
         self.x = x
         self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+        self.rect.x = x * settings.TILESIZE
+        self.rect.y = y * settings.TILESIZE
+
 
 class Queen(pygame.sprite.Sprite):
     def __init__(self, game, x, y, Team, opponent):
@@ -35,14 +38,14 @@ class Queen(pygame.sprite.Sprite):
         self.game = game
         self.team = Team
         self.opponent_team = opponent
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
+        self.image = pygame.Surface((settings.TILESIZE, settings.TILESIZE))
         self.image.fill(Team.color)
         self.rect = self.image.get_rect()
-        self.x = x 
+        self.x = x
         self.y = y
-        self.compas = {'East':(-1,0), 'West':(1,0),'North':(0,-1), 'South': (0,1)}
+        self.compas = {'East': (-1, 0), 'West': (1, 0), 'North': (0, -1), 'South': (0, 1)}
         self.possible_dir = self.possible_moves()
-    
+
     def move(self, cardinal_dir):
         assert cardinal_dir in self.compas.keys(), 'NameError of cardinal direction'
         if cardinal_dir in self.possible_dir:
@@ -50,15 +53,15 @@ class Queen(pygame.sprite.Sprite):
             self.x += dx
             self.y += dy
 
-            #No collision
+            # No collision
             if not self.sprite_collision(self.team.tiles):
                 Plane(self.game, self.x, self.y, self.team)
 
-            #Opponent tile collision
+            # Opponent tile collision
             if self.sprite_collision(self.opponent_team.tiles, True):
                 Plane(self.game, self.x, self.y, self.team)
 
-            #Capture blob
+            # Capture blob
             self.sprite_collision(self.game.unknowns, capture=True)
 
             self.possible_dir = self.possible_moves()
@@ -67,6 +70,7 @@ class Queen(pygame.sprite.Sprite):
 
     def possible_moves(self) -> list:
         moves = []
+
         def close_obstructions(obstructions):
             for obs in obstructions:
                 if (-2 < (obs.x - self.x) < 2) and (-2 < (obs.y - self.y) < 2):
@@ -74,10 +78,11 @@ class Queen(pygame.sprite.Sprite):
 
         objects_list = self.game.walls.sprites() + self.opponent_team.objects.sprites()
         obstruction_list = [obstruction for obstruction in close_obstructions(objects_list)]
+
         for item in self.compas:
             dx, dy = self.compas[item]
-            if not ((dx,dy) in obstruction_list):
-                moves.append(item) 
+            if not ((dx, dy) in obstruction_list):
+                moves.append(item)
         return moves
 
     def sprite_collision(self, sprites: list, destroy=False, capture=False):
@@ -93,27 +98,28 @@ class Queen(pygame.sprite.Sprite):
         return False
 
     def update(self):
-        self.rect.x = self.x * TILESIZE
-        self.rect.y = self.y * TILESIZE
+        self.rect.x = self.x * settings.TILESIZE
+        self.rect.y = self.y * settings.TILESIZE
+
 
 class Blobs(pygame.sprite.Sprite):
     _unit = 1
+
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.unknowns
         pygame.sprite.Sprite.__init__(self, self.groups)
-        
-        self.unit = Blobs.assign_unit()
 
+        self.unit = Blobs.assign_unit()
         self.game = game
-        
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
-        self.image.fill(MAGENTA)
+
+        self.image = pygame.Surface((settings.TILESIZE, settings.TILESIZE))
+        self.image.fill(settings.MAGENTA)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
 
         self.opponent_team = None
-        self.compas = {'East':(-1,0), 'West':(1,0),'North':(0,-1), 'South': (0,1)}
+        self.compas = {'East': (-1, 0), 'West': (1, 0), 'North': (0, -1), 'South': (0, 1)}
         self.possible_dir = self.possible_moves()
 
     @classmethod
@@ -134,22 +140,22 @@ class Blobs(pygame.sprite.Sprite):
 
     def possible_moves(self) -> list:
         moves = []
+
         def close_obstructions(obstructions):
             for obs in obstructions:
                 if (-2 < (obs.x - self.x) < 2) and (-2 < (obs.y - self.y) < 2):
                     yield ((obs.x - self.x), (obs.y - self.y))
 
-        objects_list = self.game.walls.sprites() 
-        if self.opponent_team != None:
+        objects_list = self.game.walls.sprites()
+        if self.opponent_team is not None:
             objects_list += self.opponent_team.objects.sprites()
         obstruction_list = [obstruction for obstruction in close_obstructions(objects_list)]
         for item in self.compas:
             dx, dy = self.compas[item]
-            if not ((dx,dy) in obstruction_list):
-                moves.append(item) 
+            if not ((dx, dy) in obstruction_list):
+                moves.append(item)
         return moves
 
     def update(self):
-        self.rect.x = self.x * TILESIZE
-        self.rect.y = self.y * TILESIZE
-
+        self.rect.x = self.x * settings.TILESIZE
+        self.rect.y = self.y * settings.TILESIZE

@@ -1,7 +1,9 @@
-import pygame, sys
+import pygame
+import sys
 from os.path import exists
-from settings import ORANGE, PLANE_ORANGE, BLUE, PLANE_BLUE 
+from settings import ORANGE, PLANE_ORANGE, BLUE, PLANE_BLUE
 import pexpect
+
 
 class TeamHandler:
     def __init__(self, color, plane_color):
@@ -13,9 +15,9 @@ class TeamHandler:
     @property
     def script(self):
         full_file = "{}/{}".format(self.file_path, self.file)
-        if exists(full_file): 
+        if exists(full_file):
             return full_file
-        else: 
+        else:
             raise FileNotFoundError("Player Orange File NO LONGER EXISTS")
 
     @script.setter
@@ -26,10 +28,7 @@ class TeamHandler:
             raise FileNotFoundError("File apperas to no longer exists")
 
     def spawn(self, file):
-        try:
-            self.child = pexpect.spawn(f"{sys.executable} {file}")
-        except:
-            raise ChildProcessError(f"{file}.py could not spawn")
+        self.child = pexpect.spawn(f"{sys.executable} {file}")
 
     def run_init(self, command):
         self.child.expect('')
@@ -45,10 +44,11 @@ class TeamHandler:
 
         self.child.expect('stdout:', timeout=timeout)
         player_out = self.child.readline().decode('utf-8')
-        return player_out.strip() 
+        return player_out.strip()
 
     def kill_child(self):
         self.child.close(force=True)
+
 
 class Orange(TeamHandler):
     def __init__(self):
@@ -65,7 +65,7 @@ class Orange(TeamHandler):
     def update(self):
         if self.old_sprites != self.objects.sprites():
             self.old_sprites = self.objects.sprites()
-            self.sprites_info.clear() 
+            self.sprites_info.clear()
             for sprite in self.old_sprites:
                 self.sprites_info[sprite.unit] = [sprite, sprite.possible_dir]
 
@@ -75,7 +75,8 @@ class Orange(TeamHandler):
 
     @property
     def score(self):
-        return len(self.tiles.sprites()) 
+        return len(self.tiles.sprites())
+
 
 class Blue(TeamHandler):
     def __init__(self):
@@ -92,7 +93,7 @@ class Blue(TeamHandler):
     def update(self):
         if self.old_sprites != self.objects.sprites():
             self.old_sprites = self.objects.sprites()
-            self.sprites_info.clear() 
+            self.sprites_info.clear()
             for sprite in self.old_sprites:
                 self.sprites_info[sprite.unit] = [sprite, sprite.possible_dir]
 
@@ -103,4 +104,3 @@ class Blue(TeamHandler):
     @property
     def score(self):
         return len(self.tiles.sprites())
-
